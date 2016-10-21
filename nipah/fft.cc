@@ -26,8 +26,54 @@ void runfft1D( int N, cdouble fftInput[], cdouble fftOutput[] )
 	fftw_execute(plan);
     
 	for( int j = 0; j < N; j++ )
-		fftOutput[j] = cdouble( (REAL(out,j))/N, IMAG(out,j) / N );
+		fftOutput[j] = cdouble( (REAL(out,j))/N, IMAG(out,j)/N );
 
 	fftw_destroy_plan(plan);
 	fftw_free(in); fftw_free(out);
 };
+
+void getfftInput2D(int M, int N, cdouble * rawInput[], cdouble fftInput[])
+{
+    for( int i = 0; i < M; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            fftInput[i*N+j] = rawInput[i][j];
+        };
+    };
+};
+
+void runfft2D( int M, int N, cdouble * rawInput[], cdouble * fftOutput[] )
+ {
+     fftw_complex *in, *out;
+     fftw_plan plan;
+     int size = M * N, index1D;
+     
+     cdouble * fftInput;
+     fftInput = new cdouble[size];
+     getfftInput2D(M, N, rawInput, fftInput);
+
+     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * size);
+     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * size);
+
+     for( int i = 0; i < size; i++ )
+     {
+         REAL(in,i) = real( fftInput[i] );
+         IMAG(in,i) = imag( fftInput[i] );
+     };
+
+     plan = fftw_plan_dft_2d(M, N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+     fftw_execute(plan); /* repeat as needed */
+
+     for( int i = 0; i < M; i++)
+     {
+         for( int j = 0; j < N; j++)
+         {
+             index1D = i * N + j;
+             fftOutput[i][j] = cdouble(REAL(out,index1D) / size, IMAG(out,index1D) / size);
+         };
+     };
+     
+ 	 fftw_destroy_plan(plan);
+ 	 fftw_free(in); fftw_free(out);
+ };

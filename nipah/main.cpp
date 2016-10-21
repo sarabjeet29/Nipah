@@ -8,14 +8,113 @@
 
 #include "calc.h"
 #include <fstream>
+#include <sstream>
 #include <iostream>
+#include <sys/stat.h>
+
+void save_prob_alpha_nu(vector<double>& alpha_vec, vector<double>& nu_vec,
+                        vector<int>& outbsPrimaryInfo, vector<int>& outbsNoPrimaryInfo,
+                        int sumPrimaryOutbs, int N, int M, double R )
+{
+    ofstream outputFile;
+    double pij;
+    vector< vector<double> > probObs;
+    
+    outputFile.open("./results/temp_prob_alpha_nu.txt");
+    for(double alpha : alpha_vec)
+    {
+        vector<double> probRow;
+        for( double nu : nu_vec)
+        {
+            cout << "alpha: " << alpha <<", nu: "<<nu<<"\n";
+            if( abs(round(nu / alpha ) - nu / alpha) < 1e-12 )
+            {
+                cout <<"adjusted for alpha: "<<alpha<<", nu: "<<nu<< "\n";
+                nu += 1e-6;
+            };
+            pij = getProbObs(alpha, nu, outbsPrimaryInfo, outbsNoPrimaryInfo, sumPrimaryOutbs, N, M, R );
+            probRow.push_back(pij);
+            outputFile << pij << ' ';
+        };
+        probObs.push_back(probRow);
+        outputFile << "\n";
+    };
+    outputFile.close();
+};
+
+void save_PmnPrimaryInfo(vector<double> alpha_vec, vector<double> nu_vec,
+                         vector<int> outbsPrimaryInfo, int sumPrimaryOutbs,
+                         int N, int M, double R )
+{
+    ostringstream dirStringStream, fileStringStream;
+    ofstream myfile;
+    vector<double> Pmn;
+    const char * filepath;
+    const char * dirpath;
+    double alpha = 0.7, nu = 2.0;
+
+    dirStringStream << "./results/alpha=" << int(alpha*100)/100.0 << ",nu=" << int(nu*100)/100.0;
+    dirpath = dirStringStream.str().c_str();
+    mkdir(dirpath,0777);
+    
+    dirStringStream << "/p";
+    dirpath = dirStringStream.str().c_str();
+    mkdir(dirpath,0777);
+
+    for(int s: outbsPrimaryInfo)
+    {
+        fileStringStream << dirStringStream.str().c_str() << "/" << s <<".txt";
+        filepath = fileStringStream.str().c_str();
+        fileStringStream.str(string());
+        myfile.open ( filepath );
+        getPmPrimaryInfo(alpha, nu, outbsPrimaryInfo, sumPrimaryOutbs, s, N, M, R, Pmn);
+        for( double pij : Pmn)
+            myfile << pij <<'\n';
+        Pmn.clear();
+        myfile.close();
+    };
+};
+
+void save_PmnNoPrimaryInfo(vector<double> alpha_vec, vector<double> nu_vec,
+                         vector<int> outbsNoPrimaryInfo, int N, double R )
+{
+    ostringstream dirStringStream, fileStringStream;
+    ofstream myfile;
+    const char * filepath;
+    const char * dirpath;
+    vector<vector<double>> Pmn;
+    
+    double alpha = 0.52, nu = 1.25;
+    
+    dirStringStream << "./results/alpha=" << int(alpha*100)/100.0 << ",nu=" << int(nu*100)/100.0;
+    dirpath = dirStringStream.str().c_str();
+    mkdir(dirpath,0777);
+
+    dirStringStream << "/np";
+    dirpath = dirStringStream.str().c_str();
+    mkdir(dirpath,0777);
+
+    getPmNoPrimaryInfo(alpha, nu, N, R, Pmn);
+    for( int s: outbsNoPrimaryInfo)
+    {
+        fileStringStream << dirStringStream.str().c_str() << "/" << s <<".txt";
+        filepath = fileStringStream.str().c_str();
+        fileStringStream.str(string());
+        myfile.open ( filepath );
+
+        for( double pij : Pmn[s])
+            myfile << pij <<'\n';
+
+        myfile.close();
+    };
+};
 
 int main( void )
 {
     int N, M, sumPrimaryOutbs;
     double R, alpha_min, alpha_max, alpha_step, nu_min, nu_max, nu_step;
     
-    N = 1000;
+    N = 300;
     M = 100;
     R = 1.0;
 
@@ -29,8 +128,6 @@ int main( void )
     nu_max = 2.0;
     nu_step = 0.05;
 
-    ofstream outputFile;
-   
     vector<double> distOutbSizes, distSumOutbSizesPrimary;
 
     static const int arr1[] = {5,4,7,3,1,16,44,12,66};
@@ -53,29 +150,12 @@ int main( void )
     for( double nu = nu_min; nu < nu_max + nu_step; nu += nu_step)
         nu_vec.push_back(nu);
     
-    double pij;
-    vector< vector<double> > probObs;
+    save_prob_alpha_nu(alpha_vec, nu_vec, outbsPrimaryInfo, outbsNoPrimaryInfo,
+                       sumPrimaryOutbs, N, M, R );
     
-    outputFile.open("output3.txt");
-    for(double alpha : alpha_vec)
-    {
-        vector<double> probRow;
-        for( double nu : nu_vec)
-        {
-            cout << "alpha: " << alpha <<", nu: "<<nu<<"\n";
-            if( abs(round(nu / alpha ) - nu / alpha) < 1e-12 )
-            {
-                cout <<"rounded for alpha: "<<alpha<<", nu: "<<nu<< "\n";
-                nu += 1e-6;
-            };
-            pij = getProbObs(alpha, nu, outbsPrimaryInfo, outbsNoPrimaryInfo, sumPrimaryOutbs, N, M, R );
-            probRow.push_back(pij);
-            outputFile << pij << ' ';
-        };
-        probObs.push_back(probRow);
-        outputFile << "\n";
-    };
-    outputFile.close();
-    
+    save_PmnPrimaryInfo(alpha_vec, nu_vec, outbsPrimaryInfo, sumPrimaryOutbs,
+                        N, M, R );
+
+    save_PmnNoPrimaryInfo(alpha_vec, nu_vec, outbsNoPrimaryInfo, N, R);
     return 0;
 };
