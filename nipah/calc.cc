@@ -1,67 +1,57 @@
 #include "calc.h"
+#include <iostream>
 
-void getDistOutbSizes( double alpha, double nu, vector<double>& distOutbSizes, int N, double R )
+void getDistOutbs(double alpha, double nu, vector<double>& distOutbs, int N,
+                  double R )
 {
-	cdouble *fftInput, *fftOutput;
-	fftInput = new cdouble[N];
-    fftOutput = new cdouble[N];
+	vector<cdouble> fftInput, fftOutput;
 	getfftInput1D_Gxy( cdouble(1,0), cdouble(alpha,0), cdouble(nu,0), R, N, fftInput );
 	runfft1D( N, fftInput, fftOutput );
     
     for(int i = 0; i < N; i++)
-        distOutbSizes.push_back(real(fftOutput[i]));
-    
-    delete fftInput;
-    delete fftOutput;
+        distOutbs.push_back(real(fftOutput[i]));
 };
 
-void getDistSumPrimary(double alpha, double nu, vector<int>& outbsPrimaryInfo,
-                       vector<double>& distOutbSizes, int N, int M, double R,
-                       vector<double>& distSumOutbSizesPrimary)
+void getDistSumPrimaryOutbs(double alpha, double nu, vector<int>& outbsPrimaryInfo,
+                            vector<double>& distOutbs, int N, int M, double R,
+                            vector<double>& distSumOutbSizesPrimary)
 {
-    cdouble *outerfftInput, *outerfftOutput, *innerfftInput, *innerfftOutput;
-    outerfftInput = new cdouble[M];
-    outerfftOutput = new cdouble[M];
-   
+    cdouble tempval;
+    vector<cdouble> outerfftInput, outerfftOutput, innerfftInput, innerfftOutput;
     for( int i = 0; i < M; i++ )
     {
-        innerfftInput = new cdouble[N];
-        innerfftOutput = new cdouble[N];
-
         getfftInput1D_Gxy( cdouble(R,0) * exp(cdouble(0,2*PI*i/M)), cdouble(alpha,0), cdouble(nu,0), R, N, innerfftInput);
         runfft1D( N, innerfftInput, innerfftOutput );
         
-        outerfftInput[i] = cdouble(1,0);
+        tempval = cdouble(1,0);
         for(int j : outbsPrimaryInfo)
-            outerfftInput[i] *= innerfftOutput[j] / cdouble(distOutbSizes[j],0);
+            tempval *= innerfftOutput[j] / cdouble(distOutbs[j],0);
 
-        delete innerfftInput;
-        delete innerfftOutput;
+        outerfftInput.push_back(tempval);
+        innerfftInput.clear();
+        innerfftOutput.clear();
     };
     runfft1D( M, outerfftInput, outerfftOutput);
 
     for(int i = 0; i < M; i++)
         distSumOutbSizesPrimary.push_back(real(outerfftOutput[i]));
-    
-    delete outerfftInput;
-    delete outerfftOutput;
 };
 
-double getProbObs(double alpha, double nu, vector<int>& outbsPrimaryInfo,
-                  vector<int>& outbsNoPrimaryInfo, int sumPrimaryOutbs, int N, int M,
-                  double R )
+double getProbObsOutbs(double alpha, double nu, vector<int>& outbsPrimaryInfo,
+                       vector<int>& outbsNoPrimaryInfo, int sumPrimaryOutbs, int N,
+                       int M, double R )
 {
-    vector<double> distOutbSizes, distSumOutbSizesPrimary;
-    getDistOutbSizes(alpha, nu, distOutbSizes, N, R);
-    getDistSumPrimary(alpha, nu, outbsPrimaryInfo, distOutbSizes, N, M, R, distSumOutbSizesPrimary);
+    vector<double> distOutbs, distSumOutbSizesPrimary;
+    getDistOutbs(alpha, nu, distOutbs, N, R);
+    getDistSumPrimaryOutbs(alpha, nu, outbsPrimaryInfo, distOutbs, N, M, R, distSumOutbSizesPrimary);
 
     double prob = distSumOutbSizesPrimary[sumPrimaryOutbs];
     
     for(int i : outbsNoPrimaryInfo)
-        prob *= distOutbSizes[i];
+        prob *= distOutbs[i];
     
     for(int j : outbsPrimaryInfo)
-        prob *= distOutbSizes[j];
+        prob *= distOutbs[j];
     
     return prob;
 };
@@ -69,91 +59,174 @@ double getProbObs(double alpha, double nu, vector<int>& outbsPrimaryInfo,
 void getPmPrimaryInfo(double alpha, double nu, vector<int>& outbsPrimaryInfo, int sumPrimaryOutbs, int targetOutbSize, int N, int M, double R, vector<double>& Pmn)
 {
     int lenPmn = targetOutbSize + 1;
-    vector<double> distOutbSizes, distSumPrimary;
-    getDistOutbSizes(alpha, nu, distOutbSizes, N, R);
-    getDistSumPrimary(alpha, nu, outbsPrimaryInfo, distOutbSizes, N, M, R, distSumPrimary);
+    vector<double> distOutbs, distSumPrimary;
+    getDistOutbs(alpha, nu, distOutbs, N, R);
+    getDistSumPrimaryOutbs(alpha, nu, outbsPrimaryInfo, distOutbs, N, M, R, distSumPrimary);
     
-    cdouble **fftInputL1, **fftOutputL1, *fftInputL2, *fftOutputL2;
-    fftInputL1 = new cdouble*[lenPmn];
-    fftOutputL1 = new cdouble*[lenPmn];
-    fftInputL2 = new cdouble[M];
-    fftOutputL2 = new cdouble[M];
+    vector<vector<cdouble>> fftInputL1, fftOutputL1;
+    vector<cdouble> fftInputL2, fftOutputL2, ctempRow;
+    cdouble ctempVal;
     
     for( int k = 0; k < lenPmn; k++)
     {
-        fftInputL1[k] = new cdouble[M];
-        fftOutputL1[k] = new cdouble[M];
         for( int i = 0; i < M; i++ )
         {
-            fftInputL2 = new cdouble[N];
-            fftOutputL2 = new cdouble[N];
-        
             getfftInput1D_Gxy( cdouble(R,0) * exp(cdouble(0,2*PI*i/M)),
                                cdouble(alpha,0), cdouble(nu,0), R, N, fftInputL2);
             runfft1D( N, fftInputL2, fftOutputL2 );
         
-            fftInputL1[k][i] = cdouble(1,0);
+            ctempVal = cdouble(1,0);
             for(int s : outbsPrimaryInfo)
             {
                 if( s != targetOutbSize )
-                fftInputL1[k][i] *= fftOutputL2[s] / distOutbSizes[s];
+                ctempVal *= fftOutputL2[s] / distOutbs[s];
             };
             
             if( targetOutbSize == 12) //12 is repeated so adding it back
-                fftInputL1[k][i] *= fftOutputL2[12] / distOutbSizes[12];
+                ctempVal *= fftOutputL2[12] / distOutbs[12];
             
-            delete fftInputL2;
-            delete fftOutputL2;
-            
-            fftInputL2 = new cdouble[N];
-            fftOutputL2 = new cdouble[N];
+            fftInputL2.clear();
+            fftOutputL2.clear();
 
-            getfftInput1D_Gxy( cdouble(R,0) * exp(cdouble(0,2*PI*i/M)) *
+            getfftInput1D_Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*i/M)) *
                               cdouble(R,0) * exp(cdouble(0,2*PI*k/(lenPmn))),
                               cdouble(alpha,0), cdouble(nu,0), R, N, fftInputL2);
+
             runfft1D( N, fftInputL2, fftOutputL2 );
             
-            fftInputL1[k][i] *= fftOutputL2[targetOutbSize] / distOutbSizes[targetOutbSize];
+            ctempVal *= fftOutputL2[targetOutbSize] / distOutbs[targetOutbSize];
+            ctempRow.push_back(ctempVal);
         };
+        fftInputL1.push_back(ctempRow);
+        ctempRow.clear();
     };
     runfft2D( lenPmn, M, fftInputL1, fftOutputL1);
     
     for(int i = 0; i < lenPmn; i++)
         Pmn.push_back(real(fftOutputL1[i][sumPrimaryOutbs]) / distSumPrimary[sumPrimaryOutbs]);
-    
-    delete fftInputL1;
-    delete fftOutputL1;
 };
 
 void getPmNoPrimaryInfo(double alpha, double nu, int N, double R,
                         vector< vector<double> >& Pmn)
 {
-    vector<double> distOutbSizes, temprow;
-    getDistOutbSizes(alpha, nu, distOutbSizes, N, R);
+    vector<double> distOutbs, temprow;
+    getDistOutbs(alpha, nu, distOutbs, N, R);
     
-    cdouble **fftInput, **fftOutput;
-    fftInput = new cdouble*[N];
-    fftOutput = new cdouble*[N];
+    vector<cdouble> ctemprow;
+    vector<vector<cdouble>> fftInput, fftOutput;
     for( int i = 0; i < N; i++ )
     {
-        fftInput[i] = new cdouble[N];
-        fftOutput[i] = new cdouble[N];
         for( int j = 0; j < N; j++ )
         {
-            fftInput[i][j] = Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*j/N)), cdouble(R,0) * exp(cdouble(0,2*PI*i/N)), alpha, nu);
+            ctemprow.push_back(Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*j/N)), cdouble(R,0) * exp(cdouble(0,2*PI*i/N)), alpha, nu));
         };
+        fftInput.push_back(ctemprow);
+        ctemprow.clear();
     };
     runfft2D( N, N, fftInput, fftOutput);
 
     for(int i = 0; i < N; i++)
     {
         for(int j = 0; j < N; j++)
-        {
-            temprow.push_back(real(fftOutput[i][j])/distOutbSizes[i]);
-        };
+            temprow.push_back(real(fftOutput[i][j])/distOutbs[i]);
+
         Pmn.push_back(temprow);
         temprow.clear();
     };
 };
+
+void getDistOutbsAndDeaths(double alpha, double nu, double p, double q,
+                           vector<vector<double>>& distOutbsAndDeaths, int N,
+                           double R )
+{
+    vector<double> temprow;
+    vector<vector<cdouble>> fftInput, fftOutput;
+
+    getfftInput2D_Hxzuw( cdouble(1,0), cdouble(1,0), cdouble(alpha,0), cdouble(nu,0), cdouble(p,0), cdouble(q,0), R, N, fftInput);
+    
+    runfft2D( N, N, fftInput, fftOutput);
+    
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N; j++)
+            temprow.push_back(real(fftOutput[i][j]));
+
+        distOutbsAndDeaths.push_back(temprow);
+        temprow.clear();
+    };
+};
+
+void getDistSumPrimaryOutbsAndDeaths(double alpha, double nu, double p, double q,
+                             vector<int>& outbsPrimaryInfo,
+                             vector<int>& deathsPrimaryInfo,
+                             vector<vector<double>>& distOutbsAndDeaths,
+                             int N, int M, double R,
+                             vector<vector<double>>& distSumPrimaryOutbsAndDeaths)
+{
+    int outbSize, nDeaths;
+    cdouble ctempval;
+    vector<double> tempRow;
+    vector<cdouble> ctempRow;
+    vector<vector<cdouble>> outerfftInput, outerfftOutput, innerfftInput,innerfftOutput;
+
+    for( int i = 0; i < M; i++ )
+    {
+        cout << i <<" ";
+        for( int j = 0; j < M; j++ )
+        {
+            getfftInput2D_Hxzuw( cdouble(R,0) * exp(cdouble(0,2*PI*i/M)), cdouble(R,0) * exp(cdouble(0,2*PI*j/M)), alpha, nu, p, q, R, N, innerfftInput );
+
+            runfft2D( N, N, innerfftInput, innerfftOutput );
+            
+            ctempval = cdouble(1,0);
+            for(int k = 0; k < outbsPrimaryInfo.size(); k++)
+            {
+                outbSize = outbsPrimaryInfo[k];
+                nDeaths = deathsPrimaryInfo[k];
+                ctempval *= innerfftOutput[outbSize][nDeaths] /distOutbsAndDeaths[outbSize][nDeaths];
+            };
+            ctempRow.push_back(ctempval);
+            innerfftInput.clear();
+            innerfftOutput.clear();
+        };
+        outerfftInput.push_back(ctempRow);
+        ctempRow.clear();
+    };
+    cout << "\n";
+    runfft2D( M, M, outerfftInput, outerfftOutput);
+    
+    for(int i = 0; i < M; i++)
+    {
+        for(int j = 0; j < M; j++)
+            tempRow.push_back(real(outerfftOutput[i][j]));
+        
+        distSumPrimaryOutbsAndDeaths.push_back(tempRow);
+        tempRow.clear();
+    };
+};
+
+double getProbObsOubsAndDeaths(double alpha, double nu, double p, double q,
+                               vector<int>& outbsPrimaryInfo,
+                               vector<int>& outbsNoPrimaryInfo,
+                               vector<int>& deathsPrimaryInfo,
+                               vector<int>& deathsNoPrimaryInfo, int sumPrimaryOutbs,
+                               int sumPrimaryDeaths, int N, int M, double R )
+{
+    vector<vector<double>> distOutbsAndDeaths, distSumPrimaryOutbsAndDeaths;
+    getDistOutbsAndDeaths(alpha, nu, p, q,distOutbsAndDeaths, N, R );
+    getDistSumPrimaryOutbsAndDeaths(alpha, nu, p, q, outbsPrimaryInfo, deathsPrimaryInfo, distOutbsAndDeaths, N, M, R, distSumPrimaryOutbsAndDeaths);
+    
+    double prob = distSumPrimaryOutbsAndDeaths[sumPrimaryOutbs][sumPrimaryDeaths];
+    
+    for( int i = 0; i < outbsNoPrimaryInfo.size(); i++ )
+        prob *= distOutbsAndDeaths[outbsNoPrimaryInfo[i]][deathsNoPrimaryInfo[i]];
+
+    for( int j = 0; j < outbsPrimaryInfo.size(); j++ )
+        prob *= distOutbsAndDeaths[outbsPrimaryInfo[j]][deathsPrimaryInfo[j]];
+
+    return prob;
+};
+
+
 
 
