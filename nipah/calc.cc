@@ -67,43 +67,45 @@ void getPmPrimaryInfo(double alpha, double nu, vector<int>& outbsPrimaryInfo, in
     vector<cdouble> fftInputL2, fftOutputL2, ctempRow;
     cdouble ctempVal;
     
-    for( int k = 0; k < lenPmn; k++)
+    for( int i = 0; i < M; i++ )
     {
-        for( int i = 0; i < M; i++ )
-        {
-            getfftInput1D_Gxy( cdouble(R,0) * exp(cdouble(0,2*PI*i/M)),
-                               cdouble(alpha,0), cdouble(nu,0), R, N, fftInputL2);
-            runfft1D( N, fftInputL2, fftOutputL2 );
+        getfftInput1D_Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*i/M)),
+                          cdouble(alpha,0), cdouble(nu,0), R, N, fftInputL2);
+        runfft1D( N, fftInputL2, fftOutputL2 );
         
-            ctempVal = cdouble(1,0);
-            for(int s : outbsPrimaryInfo)
-            {
-                if( s != targetOutbSize )
+        ctempVal = cdouble(1,0);
+        for(int s : outbsPrimaryInfo)
+        {
+            if( s != targetOutbSize )
                 ctempVal *= fftOutputL2[s] / distOutbs[s];
-            };
+        };
             
-            if( targetOutbSize == 12) //12 is repeated so adding it back
-                ctempVal *= fftOutputL2[12] / distOutbs[12];
+        if(targetOutbSize == 12) //12 is repeated so adding it back
+            ctempVal *= fftOutputL2[12] / distOutbs[12];
             
-            fftInputL2.clear();
-            fftOutputL2.clear();
+        fftInputL2.clear();
+        fftOutputL2.clear();
 
+        for( int k = 0; k < lenPmn; k++)
+        {
             getfftInput1D_Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*i/M)) *
                               cdouble(R,0) * exp(cdouble(0,2*PI*k/(lenPmn))),
                               cdouble(alpha,0), cdouble(nu,0), R, N, fftInputL2);
 
             runfft1D( N, fftInputL2, fftOutputL2 );
             
-            ctempVal *= fftOutputL2[targetOutbSize] / distOutbs[targetOutbSize];
-            ctempRow.push_back(ctempVal);
+            ctempRow.push_back(ctempVal * fftOutputL2[targetOutbSize] / distOutbs[targetOutbSize]);
+            fftInputL2.clear();
+            fftOutputL2.clear();
         };
+        
         fftInputL1.push_back(ctempRow);
         ctempRow.clear();
     };
-    runfft2D( lenPmn, M, fftInputL1, fftOutputL1);
+    runfft2D( M, lenPmn, fftInputL1, fftOutputL1);
     
-    for(int i = 0; i < lenPmn; i++)
-        Pmn.push_back(real(fftOutputL1[i][sumPrimaryOutbs]) / distSumPrimary[sumPrimaryOutbs]);
+    for(int j = 0; j < lenPmn; j++)
+        Pmn.push_back(real(fftOutputL1[sumPrimaryOutbs][j]) / distSumPrimary[sumPrimaryOutbs]);
 };
 
 void getPmNoPrimaryInfo(double alpha, double nu, int N, double R,
