@@ -1,15 +1,19 @@
 #include "calc.h"
 #include <iostream>
 
-void getDistOutbs(double alpha, double nu, vector<double>& distOutbs, int N,
-                  double R )
+void getDistOutbs(double alpha, double nu, vector<double>& distOutbs, int N, double R )
 {
-	vector<cdouble> fftInput, fftOutput;
+	fftw_complex *fftInput, *fftOutput;
+    fftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+    fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+
 	getfftInput1D_Gxy( cdouble(1,0), cdouble(alpha,0), cdouble(nu,0), R, N, fftInput );
 	runfft1D( N, fftInput, fftOutput );
     
     for(int i = 0; i < N; i++)
-        distOutbs.push_back(real(fftOutput[i]));
+        distOutbs.push_back(REAL(fftOutput, i));
+    
+    fftw_free(fftInput); fftw_free(fftOutput);
 };
 
 void getDistSumPrimaryOutbs(double alpha, double nu, vector<int>& outbsPrimaryInfo,
@@ -17,24 +21,34 @@ void getDistSumPrimaryOutbs(double alpha, double nu, vector<int>& outbsPrimaryIn
                             vector<double>& distSumOutbSizesPrimary)
 {
     cdouble tempval;
-    vector<cdouble> outerfftInput, outerfftOutput, innerfftInput, innerfftOutput;
+    fftw_complex *outerfftInput, *outerfftOutput, *innerfftInput, *innerfftOutput;
+
+    outerfftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * M);
+    outerfftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * M);
+    
     for( int i = 0; i < M; i++ )
     {
+        innerfftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+        innerfftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+
         getfftInput1D_Gxy( cdouble(R,0) * exp(cdouble(0,2*PI*i/M)), cdouble(alpha,0), cdouble(nu,0), R, N, innerfftInput);
         runfft1D( N, innerfftInput, innerfftOutput );
         
         tempval = cdouble(1,0);
         for(int j : outbsPrimaryInfo)
-            tempval *= innerfftOutput[j] / cdouble(distOutbs[j],0);
+            tempval *= cdouble(REAL(innerfftOutput, j), IMAG(innerfftOutput, j)) / cdouble(distOutbs[j],0);
 
-        outerfftInput.push_back(tempval);
-        innerfftInput.clear();
-        innerfftOutput.clear();
+        REAL(outerfftInput,i) = real(tempval);
+        IMAG(outerfftInput,i) = imag(tempval);
+        
+        fftw_free(innerfftInput); fftw_free(innerfftOutput);
     };
     runfft1D( M, outerfftInput, outerfftOutput);
 
     for(int i = 0; i < M; i++)
-        distSumOutbSizesPrimary.push_back(real(outerfftOutput[i]));
+        distSumOutbSizesPrimary.push_back(REAL(outerfftOutput, i));
+    
+    fftw_free(outerfftInput); fftw_free(outerfftOutput);
 };
 
 double getProbObsOutbs(double alpha, double nu, vector<int>& outbsPrimaryInfo,
@@ -43,7 +57,8 @@ double getProbObsOutbs(double alpha, double nu, vector<int>& outbsPrimaryInfo,
 {
     vector<double> distOutbs, distSumOutbSizesPrimary;
     getDistOutbs(alpha, nu, distOutbs, N, R);
-    getDistSumPrimaryOutbs(alpha, nu, outbsPrimaryInfo, distOutbs, N, M, R, distSumOutbSizesPrimary);
+    getDistSumPrimaryOutbs(alpha, nu, outbsPrimaryInfo, distOutbs, N, M, R,
+                           distSumOutbSizesPrimary);
 
     double prob = distSumOutbSizesPrimary[sumPrimaryOutbs];
     
@@ -63,86 +78,102 @@ void getPmPrimaryInfo(double alpha, double nu, vector<int>& outbsPrimaryInfo, in
     getDistOutbs(alpha, nu, distOutbs, N, R);
     getDistSumPrimaryOutbs(alpha, nu, outbsPrimaryInfo, distOutbs, N, M, R, distSumPrimary);
     
-    vector<vector<cdouble>> fftInputL1, fftOutputL1;
-    vector<cdouble> fftInputL2, fftOutputL2, ctempRow;
+    fftw_complex *outerfftInput, *outerfftOutput, *innerfftInput, *innerfftOutput;
     cdouble ctempVal;
+    
+    outerfftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * M * lenPmn);
+    outerfftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * M * lenPmn);
     
     for( int i = 0; i < M; i++ )
     {
+        innerfftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+        innerfftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+        
         getfftInput1D_Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*i/M)),
-                          cdouble(alpha,0), cdouble(nu,0), R, N, fftInputL2);
-        runfft1D( N, fftInputL2, fftOutputL2 );
+                          cdouble(alpha,0), cdouble(nu,0), R, N, innerfftInput);
+        runfft1D( N, innerfftInput, innerfftOutput );
         
         ctempVal = cdouble(1,0);
         for(int s : outbsPrimaryInfo)
         {
             if( s != targetOutbSize )
-                ctempVal *= fftOutputL2[s] / distOutbs[s];
+                ctempVal *= cdouble(REAL(innerfftOutput,s), IMAG(innerfftOutput,s)) / distOutbs[s];
         };
             
         if(targetOutbSize == 12) //12 is repeated so adding it back
-            ctempVal *= fftOutputL2[12] / distOutbs[12];
+            ctempVal *= cdouble(REAL(innerfftOutput,12), IMAG(innerfftOutput,12)) / distOutbs[12];
             
-        fftInputL2.clear();
-        fftOutputL2.clear();
+        fftw_free(innerfftInput); fftw_free(innerfftOutput);
 
         for( int k = 0; k < lenPmn; k++)
         {
+            innerfftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+            innerfftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
             getfftInput1D_Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*i/M)) *
                               cdouble(R,0) * exp(cdouble(0,2*PI*k/(lenPmn))),
-                              cdouble(alpha,0), cdouble(nu,0), R, N, fftInputL2);
+                              cdouble(alpha,0), cdouble(nu,0), R, N, innerfftInput);
 
-            runfft1D( N, fftInputL2, fftOutputL2 );
+            runfft1D(N, innerfftInput, innerfftOutput);
             
-            ctempRow.push_back(ctempVal * fftOutputL2[targetOutbSize] / distOutbs[targetOutbSize]);
-            fftInputL2.clear();
-            fftOutputL2.clear();
+            ctempVal *= cdouble(REAL(innerfftOutput, targetOutbSize),
+                                IMAG(innerfftOutput, targetOutbSize)) / distOutbs[targetOutbSize];
+            
+            REAL(outerfftInput, i * lenPmn + k) = real(ctempVal);
+            IMAG(outerfftInput, i * lenPmn + k) = imag(ctempVal);
+            
+            fftw_free(innerfftInput); fftw_free(innerfftOutput);
         };
-        
-        fftInputL1.push_back(ctempRow);
-        ctempRow.clear();
     };
-    runfft2D( M, lenPmn, fftInputL1, fftOutputL1);
+    runfft2D(M, lenPmn, outerfftInput, outerfftOutput);
     
     for(int j = 0; j < lenPmn; j++)
-        Pmn.push_back(real(fftOutputL1[sumPrimaryOutbs][j]) / distSumPrimary[sumPrimaryOutbs]);
+        Pmn.push_back(REAL(outerfftOutput, sumPrimaryOutbs * lenPmn + j) /
+                      distSumPrimary[sumPrimaryOutbs]);
+
+    fftw_free(outerfftInput); fftw_free(outerfftOutput);
 };
 
-void getPmNoPrimaryInfo(double alpha, double nu, int N, double R,
-                        vector< vector<double> >& Pmn)
+void getPmNoPrimaryInfo(double alpha, double nu, int N, double R, vector<vector<double>>& Pmn)
 {
     vector<double> distOutbs, temprow;
     getDistOutbs(alpha, nu, distOutbs, N, R);
     
-    vector<cdouble> ctemprow;
-    vector<vector<cdouble>> fftInput, fftOutput;
+    cdouble ctempval;
+    fftw_complex *fftInput, *fftOutput;
+    fftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N * N);
+    fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N * N);
+
     for( int i = 0; i < N; i++ )
     {
         for( int j = 0; j < N; j++ )
         {
-            ctemprow.push_back(Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*j/N)), cdouble(R,0) * exp(cdouble(0,2*PI*i/N)), alpha, nu));
+            ctempval = Gxy(cdouble(R,0) * exp(cdouble(0,2*PI*j/N)), cdouble(R,0) *
+                           exp(cdouble(0,2*PI*i/N)), alpha, nu);
+            REAL(fftInput, i * N + j) = real(ctempval);
+            IMAG(fftInput, i * N + j) = imag(ctempval);
         };
-        fftInput.push_back(ctemprow);
-        ctemprow.clear();
     };
     runfft2D( N, N, fftInput, fftOutput);
 
     for(int i = 0; i < N; i++)
     {
         for(int j = 0; j < N; j++)
-            temprow.push_back(real(fftOutput[i][j])/distOutbs[i]);
+            temprow.push_back(REAL(fftOutput, i * N + j) / distOutbs[i]);
 
         Pmn.push_back(temprow);
         temprow.clear();
     };
+
+    fftw_free(fftInput); fftw_free(fftOutput);
 };
 
 void getDistOutbsAndDeaths(double alpha, double nu, double p, double q,
-                           vector<vector<double>>& distOutbsAndDeaths, int N,
-                           double R )
+                           vector<vector<double>>& distOutbsAndDeaths, int N, double R )
 {
     vector<double> temprow;
-    vector<vector<cdouble>> fftInput, fftOutput;
+    fftw_complex *fftInput, *fftOutput;
+    fftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N * N);
+    fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N * N);
 
     getfftInput2D_Hxzuw( cdouble(1,0), cdouble(1,0), cdouble(alpha,0), cdouble(nu,0), cdouble(p,0), cdouble(q,0), R, N, fftInput);
     
@@ -151,11 +182,13 @@ void getDistOutbsAndDeaths(double alpha, double nu, double p, double q,
     for(int i = 0; i < N; i++)
     {
         for(int j = 0; j < N; j++)
-            temprow.push_back(real(fftOutput[i][j]));
+            temprow.push_back(REAL(fftOutput, i * N + j));
 
         distOutbsAndDeaths.push_back(temprow);
         temprow.clear();
     };
+
+    fftw_free(fftInput); fftw_free(fftOutput);
 };
 
 void getDistSumPrimaryOutbsAndDeaths(double alpha, double nu, double p, double q,
@@ -169,13 +202,19 @@ void getDistSumPrimaryOutbsAndDeaths(double alpha, double nu, double p, double q
     cdouble ctempval;
     vector<double> tempRow;
     vector<cdouble> ctempRow;
-    vector<vector<cdouble>> outerfftInput, outerfftOutput, innerfftInput,innerfftOutput;
+    fftw_complex *outerfftInput, *outerfftOutput, *innerfftInput, *innerfftOutput;
+    
+    outerfftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * M * M);
+    outerfftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * M * M);
 
     for( int i = 0; i < M; i++ )
     {
         cout << i <<" ";
         for( int j = 0; j < M; j++ )
         {
+            innerfftInput  = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N * N);
+            innerfftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N * N);
+
             getfftInput2D_Hxzuw( cdouble(R,0) * exp(cdouble(0,2*PI*i/M)), cdouble(R,0) * exp(cdouble(0,2*PI*j/M)), alpha, nu, p, q, R, N, innerfftInput );
 
             runfft2D( N, N, innerfftInput, innerfftOutput );
@@ -185,14 +224,13 @@ void getDistSumPrimaryOutbsAndDeaths(double alpha, double nu, double p, double q
             {
                 outbSize = outbsPrimaryInfo[k];
                 nDeaths = deathsPrimaryInfo[k];
-                ctempval *= innerfftOutput[outbSize][nDeaths] /distOutbsAndDeaths[outbSize][nDeaths];
+                ctempval *= cdouble(REAL(innerfftOutput, outbSize * N + nDeaths),
+                                    IMAG(innerfftOutput, outbSize * N + nDeaths)) /distOutbsAndDeaths[outbSize][nDeaths];
             };
-            ctempRow.push_back(ctempval);
-            innerfftInput.clear();
-            innerfftOutput.clear();
+            fftw_free(innerfftInput); fftw_free(innerfftOutput);
+            REAL(outerfftInput, i * M + j) = real(ctempval);
+            REAL(outerfftInput, i * M + j) = imag(ctempval);
         };
-        outerfftInput.push_back(ctempRow);
-        ctempRow.clear();
     };
     cout << "\n";
     runfft2D( M, M, outerfftInput, outerfftOutput);
@@ -200,7 +238,7 @@ void getDistSumPrimaryOutbsAndDeaths(double alpha, double nu, double p, double q
     for(int i = 0; i < M; i++)
     {
         for(int j = 0; j < M; j++)
-            tempRow.push_back(real(outerfftOutput[i][j]));
+            tempRow.push_back(REAL(outerfftOutput, i * M + j));
         
         distSumPrimaryOutbsAndDeaths.push_back(tempRow);
         tempRow.clear();

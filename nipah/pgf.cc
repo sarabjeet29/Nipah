@@ -1,4 +1,5 @@
 #include "pgf.h"
+#include <iostream>
 
 cdouble lambda0( cdouble y, cdouble alpha )
 {
@@ -8,7 +9,8 @@ cdouble lambda0( cdouble y, cdouble alpha )
 
 cdouble Gxy( cdouble x, cdouble y, cdouble alpha, cdouble nu )
 {
-	if( x == cdouble(1,0) && y == cdouble(1,0) )
+    cout << "x: " << x << ", y: " << y << '\n';
+    if( x == cdouble(1,0) && y == cdouble(1,0) )
         return cdouble(1,0);
     
     else if( x == cdouble(1,0) && alpha == cdouble(1,0) && nu == cdouble(1,0))

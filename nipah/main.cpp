@@ -197,7 +197,7 @@ int main( void )
     int N, M, sumPrimaryOutbs, sumPrimaryDeaths;
     double R, alpha_min, alpha_max, alpha_step, nu_min, nu_max, nu_step, p_min, p_max, p_step, q_min, q_max, q_step;
     
-    N = 300;
+    N = 1000;
     M = 100;
     R = 1.0;
 
