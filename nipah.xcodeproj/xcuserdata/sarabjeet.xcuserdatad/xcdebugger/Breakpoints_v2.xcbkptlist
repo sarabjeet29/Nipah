@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505352359.951253"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "10"
+            endingLineNumber = "10"
+            landmarkName = "getDistOutbs(int N, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distOutbs)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505352359.951253"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "getDistSumPrimaryOutbs(vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;double&gt;&amp; distOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distSumOutbSizesPrimary)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505352359.951253"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "getDistSumPrimaryOutbs(vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;double&gt;&amp; distOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distSumOutbSizesPrimary)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505352359.951253"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "malloc_error_break"
+            moduleName = "">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "malloc_error_break"
+                  moduleName = "libsystem_malloc.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  offsetFromSymbolStart = "0">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505352359.951253"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "11"
+            endingLineNumber = "11"
+            landmarkName = "getDistOutbs(int N, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distOutbs)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/fft.cc"
+            timestampString = "500257274.69105"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "getfftInput2D(int M, int N, vector&lt;vector&lt;cdouble&gt;&gt;&amp; rawInput, vector&lt;cdouble&gt;&amp; fftInput)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505354255.225512"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
+            landmarkName = "getDistSumPrimaryOutbsAndDeaths(double alpha, double nu, double p, double q, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; deathsPrimaryInfo, vector&lt;vector&lt;double&gt;&gt;&amp; distOutbsAndDeaths, int N, int M, double R, vector&lt;vector&lt;double&gt;&gt;&amp; distSumPrimaryOutbsAndDeaths)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505354255.225512"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
+            landmarkName = "getProbObsOubsAndDeaths(double alpha, double nu, double p, double q, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, vector&lt;int&gt;&amp; deathsPrimaryInfo, vector&lt;int&gt;&amp; deathsNoPrimaryInfo, int sumPrimaryOutbs, int sumPrimaryDeaths, int N, int M, double R )"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505352359.951253"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505352359.951253"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "cachedata.cc"
+            timestampString = "505265393.076675"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "save_prob_alpha_nu(vector&lt;double&gt;&amp; alpha_vec, vector&lt;double&gt;&amp; nu_vec, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int M, int N)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505331827.838348"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "6"
+            endingLineNumber = "6"
+            landmarkName = "getDistOutbs(int N, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distOutbs)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/calc.cc"
+            timestampString = "505352406.067083"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "7"
+            endingLineNumber = "7"
+            landmarkName = "getDistOutbs(int N, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distOutbs)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/main.cpp"
+            timestampString = "506006575.41433"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "main( void )"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

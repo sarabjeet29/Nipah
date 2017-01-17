@@ -13,6 +13,8 @@
 		66F0D1BA1D900E45005EC1F4 /* fft.cc in Sources */ = {isa = PBXBuildFile; fileRef = 66F0D1B41D900E45005EC1F4 /* fft.cc */; settings = {ASSET_TAGS = (); }; };
 		66F0D1BB1D900E45005EC1F4 /* pgf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 66F0D1B61D900E45005EC1F4 /* pgf.cc */; settings = {ASSET_TAGS = (); }; };
 		66F0D1BC1D90105D005EC1F4 /* nipah in Sources */ = {isa = PBXBuildFile; fileRef = 66F0D1A61D900DDA005EC1F4 /* nipah */; settings = {ASSET_TAGS = (); }; };
+		66F246A91E26F42C00829456 /* cachedata.cc in Sources */ = {isa = PBXBuildFile; fileRef = 66F246A81E26F42C00829456 /* cachedata.cc */; settings = {ASSET_TAGS = (); }; };
+		66F246AD1E26F6D700829456 /* readdata.cc in Sources */ = {isa = PBXBuildFile; fileRef = 66F246AB1E26F6D700829456 /* readdata.cc */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +40,10 @@
 		66F0D1B51D900E45005EC1F4 /* fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft.h; path = nipah/fft.h; sourceTree = "<group>"; };
 		66F0D1B61D900E45005EC1F4 /* pgf.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pgf.cc; path = nipah/pgf.cc; sourceTree = "<group>"; };
 		66F0D1B71D900E45005EC1F4 /* pgf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pgf.h; path = nipah/pgf.h; sourceTree = "<group>"; };
+		66F246A81E26F42C00829456 /* cachedata.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cachedata.cc; path = nipah/cachedata.cc; sourceTree = "<group>"; };
+		66F246AA1E26F44100829456 /* cachedata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cachedata.h; path = nipah/cachedata.h; sourceTree = "<group>"; };
+		66F246AB1E26F6D700829456 /* readdata.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = readdata.cc; path = nipah/readdata.cc; sourceTree = "<group>"; };
+		66F246AC1E26F6D700829456 /* readdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = readdata.h; path = nipah/readdata.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +66,12 @@
 				66F0D1B61D900E45005EC1F4 /* pgf.cc */,
 				66F0D1B51D900E45005EC1F4 /* fft.h */,
 				66F0D1B41D900E45005EC1F4 /* fft.cc */,
+				66F246AC1E26F6D700829456 /* readdata.h */,
+				66F246AB1E26F6D700829456 /* readdata.cc */,
 				66F0D1B31D900E45005EC1F4 /* calc.h */,
 				66F0D1B21D900E45005EC1F4 /* calc.cc */,
+				66F246AA1E26F44100829456 /* cachedata.h */,
+				66F246A81E26F42C00829456 /* cachedata.cc */,
 				66F0D1A81D900DDA005EC1F4 /* nipah */,
 				66F0D1A71D900DDA005EC1F4 /* Products */,
 			);
@@ -144,6 +154,8 @@
 				66F0D1B81D900E45005EC1F4 /* betainc.cc in Sources */,
 				66F0D1BC1D90105D005EC1F4 /* nipah in Sources */,
 				66F0D1BA1D900E45005EC1F4 /* fft.cc in Sources */,
+				66F246AD1E26F6D700829456 /* readdata.cc in Sources */,
+				66F246A91E26F42C00829456 /* cachedata.cc in Sources */,
 				66F0D1AA1D900DDA005EC1F4 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,14 +244,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				LINK_WITH_STANDARD_LIBRARIES = NO;
+				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = (
 					"-lm",
 					"-lstdc++",
+					"-lz",
 					"-lfftw3",
 					"-lgsl",
 				);
@@ -252,14 +266,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				LINK_WITH_STANDARD_LIBRARIES = NO;
+				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = (
 					"-lm",
 					"-lstdc++",
+					"-lz",
 					"-lfftw3",
 					"-lgsl",
 				);
@@ -288,6 +304,7 @@
 				66F0D1AF1D900DDA005EC1F4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

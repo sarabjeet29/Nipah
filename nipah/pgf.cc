@@ -9,7 +9,6 @@ cdouble lambda0( cdouble y, cdouble alpha )
 
 cdouble Gxy( cdouble x, cdouble y, cdouble alpha, cdouble nu )
 {
-    cout << "x: " << x << ", y: " << y << '\n';
     if( x == cdouble(1,0) && y == cdouble(1,0) )
         return cdouble(1,0);
     
@@ -33,8 +32,12 @@ cdouble Gxy( cdouble x, cdouble y, cdouble alpha, cdouble nu )
 
 cdouble Hxzuw( cdouble x, cdouble z, cdouble u, cdouble w, cdouble alpha, cdouble nu, cdouble p, cdouble q)
 {
-	return Gxy( x * (cdouble(1,0) - p + p*u*w) / (cdouble(1,0) - q + q*w), (cdouble(1,0) - q + q*w) * z, 
-	alpha, nu );
+    //x: primary outbreak size
+    //z: total outbreak size
+    //u: primary deaths
+    //w: total deaths
+    return Gxy( x * (cdouble(1,0) - p + p*u*w) / (cdouble(1,0) - q + q*w),
+               (cdouble(1,0) - q + q*w) * z, alpha, nu );
 };
 
 
