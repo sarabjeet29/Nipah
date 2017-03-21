@@ -8,8 +8,8 @@
 #include <vector>
 
 #define MAXIT 100000000
-#define EPS 1e-15 
-#define FPMIN 1.0e-30
+#define EPS 1e-12
+#define FPMIN 1.0e-12
 using namespace std;
 
 typedef complex<double> cdouble;

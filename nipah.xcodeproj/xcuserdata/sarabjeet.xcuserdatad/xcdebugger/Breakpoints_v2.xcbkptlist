@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "27"
             endingLineNumber = "27"
-            landmarkName = "getDistSumPrimaryOutbs(vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;double&gt;&amp; distOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distSumOutbSizesPrimary)"
+            landmarkName = "getDistSumPrimaryOutbs(vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;double&gt;&amp; distOutbs, int M, int N, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distSumOutbSizesPrimary)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -47,7 +47,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "35"
             endingLineNumber = "35"
-            landmarkName = "getDistSumPrimaryOutbs(vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;double&gt;&amp; distOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distSumOutbSizesPrimary)"
+            landmarkName = "getDistSumPrimaryOutbs(vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;double&gt;&amp; distOutbs, int M, int N, vector&lt;cdouble&gt;&amp; cachedGxy, vector&lt;double&gt;&amp; distSumOutbSizesPrimary)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -63,7 +63,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "45"
             endingLineNumber = "45"
-            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy)"
+            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int M, int N, vector&lt;cdouble&gt;&amp; cachedGxy)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -127,44 +127,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "nipah/calc.cc"
-            timestampString = "505354255.225512"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "getDistSumPrimaryOutbsAndDeaths(double alpha, double nu, double p, double q, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; deathsPrimaryInfo, vector&lt;vector&lt;double&gt;&gt;&amp; distOutbsAndDeaths, int N, int M, double R, vector&lt;vector&lt;double&gt;&gt;&amp; distSumPrimaryOutbsAndDeaths)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nipah/calc.cc"
-            timestampString = "505354255.225512"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
-            landmarkName = "getProbObsOubsAndDeaths(double alpha, double nu, double p, double q, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, vector&lt;int&gt;&amp; deathsPrimaryInfo, vector&lt;int&gt;&amp; deathsNoPrimaryInfo, int sumPrimaryOutbs, int sumPrimaryDeaths, int N, int M, double R )"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nipah/calc.cc"
             timestampString = "505352359.951253"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "39"
             endingLineNumber = "39"
-            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy)"
+            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int M, int N, vector&lt;cdouble&gt;&amp; cachedGxy)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -180,7 +148,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "38"
             endingLineNumber = "38"
-            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int N, int M, vector&lt;cdouble&gt;&amp; cachedGxy)"
+            landmarkName = "getProbObsOutbs(double alpha, double nu, vector&lt;int&gt;&amp; outbsPrimaryInfo, vector&lt;int&gt;&amp; outbsNoPrimaryInfo, int sumPrimaryOutbs, int M, int N, vector&lt;cdouble&gt;&amp; cachedGxy)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -239,12 +207,122 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "nipah/main.cpp"
-            timestampString = "506006575.41433"
+            timestampString = "510588442.866798"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "main( void )"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/readdata.h"
+            timestampString = "509983011.836092"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "9"
+            endingLineNumber = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/main.cpp"
+            timestampString = "509463732.641888"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "main( void )"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/readdata.cc"
+            timestampString = "510156679.982514"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "read_cached_Hxzuw(double alpha, double nu, double p, double q, int M, int N, vector&lt;cdouble&gt;&amp; Hxzuw)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/readdata.cc"
+            timestampString = "510588219.31189"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "read_cached_Hxzuw(double alpha, double nu, double p, double q, int M, int N, vector&lt;cdouble&gt;&amp; Hxzuw)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/readdata.cc"
+            timestampString = "510068611.841808"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "read_cached_Hxzuw(double alpha, double nu, double p, double q, int M, int N, vector&lt;cdouble&gt;&amp; Hxzuw)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/readdata.cc"
+            timestampString = "510512359.099279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "read_cached_Hxzuw(double alpha, double nu, double p, double q, int M, int N, vector&lt;cdouble&gt;&amp; Hxzuw)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nipah/readdata.cc"
+            timestampString = "510512576.072549"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "read_cached_Hxzuw(double alpha, double nu, double p, double q, int M, int N, vector&lt;cdouble&gt;&amp; Hxzuw)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

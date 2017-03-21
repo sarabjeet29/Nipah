@@ -47,7 +47,8 @@ void save_prob_alpha_nu(vector<double>& alpha_vec, vector<double>& nu_vec,
 {
     double pij;
     vector<cdouble> cachedGxy;
-    gzFile outputFile = gzopen("./results/temp_prob_alpha_nu.gz", "wb9");
+    ofstream outputFile;
+    outputFile.open("./results/temp_prob_alpha_nu.txt");
     ostringstream pijstr;
     for(double alpha : alpha_vec)
     {
@@ -59,13 +60,11 @@ void save_prob_alpha_nu(vector<double>& alpha_vec, vector<double>& nu_vec,
 
             pij = getProbObsOutbs(alpha, nu, outbsPrimaryInfo, outbsNoPrimaryInfo, sumPrimaryOutbs, N, M, cachedGxy);
             cachedGxy.clear();
-            pijstr << pij << ' ';
-            gzprintf(outputFile, pijstr.str().c_str());
-            pijstr.str(string());
+            outputFile << pij << ' ';
         };
-        gzprintf(outputFile, "\n");
+        outputFile << '\n';
     };
-    gzclose(outputFile);
+    outputFile.close();
 };
 
 void save_PmnPrimaryInfo(vector<double> alpha_vec, vector<double> nu_vec,
@@ -162,11 +161,12 @@ void cache_Hxzuw(vector<double>& alpha_vec, vector<double>& nu_vec, vector<doubl
                  vector<double> q_vec, double R, double M, double N)
 {
     ostringstream dirStringStream, fileStringStream;
+    gzFile outputFile;
     const char * filepath;
     const char * dirpath;
     cdouble value;
     ostringstream strvalue;
-    
+    strvalue << " ";
     for(double alpha: alpha_vec)
     {
         for(double nu: nu_vec)
@@ -188,7 +188,7 @@ void cache_Hxzuw(vector<double>& alpha_vec, vector<double>& nu_vec, vector<doubl
                     fileStringStream << dirStringStream.str().c_str() << "/Hxzuw_M=" << M <<
                     "_N=" << N << ".gz";
                     filepath = fileStringStream.str().c_str();
-                    gzFile outputFile = gzopen(filepath, "wb9");
+                    outputFile = gzopen(filepath, "wb9");
                     if( abs(round(nu / alpha ) - nu / alpha) < 1e-12 )
                     {
                         cout <<"adjusted for alpha: "<<alpha<<", nu: "<<nu<< "\n";
@@ -202,12 +202,12 @@ void cache_Hxzuw(vector<double>& alpha_vec, vector<double>& nu_vec, vector<doubl
                             {
                                 for(int l = 0; l < N; l++)
                                 {
-                                    value = Hxzuw(cdouble(R,0) * exp(cdouble(0,2*PI*i/M)),
-                                                  cdouble(R,0) * exp(cdouble(0,2*PI*j/M)),
+                                    value = Hxzuw(cdouble(R,0) * exp(cdouble(0,2*PI*j/M)),
+                                                  cdouble(R,0) * exp(cdouble(0,2*PI*l/M)),
+                                                  cdouble(R,0) * exp(cdouble(0,2*PI*i/N)),
                                                   cdouble(R,0) * exp(cdouble(0,2*PI*k/N)),
-                                                  cdouble(R,0) * exp(cdouble(0,2*PI*l/N)),
                                                   alpha, nu, p, q);
-                                    strvalue << real(value) << ' ' << imag(value) <<'\n';
+                                    strvalue << real(value) << ' ' << imag(value) << "\n";
                                     gzprintf(outputFile, strvalue.str().c_str());
                                     strvalue.str(string());
                                 };
@@ -223,58 +223,57 @@ void cache_Hxzuw(vector<double>& alpha_vec, vector<double>& nu_vec, vector<doubl
     };
 };
 
-void save_prob_p_q(vector<double>& alpha_vec, vector<double>& nu_vec,
-                   vector<double>& p_vec, vector<double>& q_vec,
-                   vector<int>& outbsPrimaryInfo, vector<int>& outbsNoPrimaryInfo,
-                   vector<int>& deathsPrimaryInfo, vector<int>& deathsNoPrimaryInfo,
-                   int sumPrimaryOutbs, int sumPrimaryDeaths, int M, int N, double R )
-{
-    ostringstream dirStringStream, fileStringStream;
-    ofstream myfile;
-    const char * filepath;
-    const char * dirpath;
-    vector<vector<double>> probObsDeaths;
-    vector<double> probRow;
-    double pij;
-    for(double alpha: alpha_vec)
-    {
-        for( double nu: nu_vec)
-        {
-            dirStringStream << "./results/alpha=" << int(alpha*100)/100.0 << ",nu=" << int(nu*100)/100.0;
-            dirpath = dirStringStream.str().c_str();
-            mkdir(dirpath,0777);
-            
-            fileStringStream << dirStringStream.str().c_str() <<"/prob_p_q.txt";
-            filepath = fileStringStream.str().c_str();
-            fileStringStream.str(string());
-            dirStringStream.str(string());
-            myfile.open ( filepath );
-            
-            if( abs(round(nu / alpha ) - nu / alpha) < 1e-12 )
-            {
-                cout << "slightly adjusted nu for alpha: "<<alpha<<", nu: "<<nu<< "\n";
-                nu += 1e-6;
-            };
-            
-            for(double p: p_vec)
-            {
-                for(double q: q_vec)
-                {
-                    cout << "alpha: " << alpha <<", nu: "<< nu << ", p: " << p <<", q: "<< q << "\n";
-                    
-                    pij = getProbObsOubsAndDeaths(alpha, nu, p, q, outbsPrimaryInfo,
-                                                  outbsNoPrimaryInfo, deathsPrimaryInfo,
-                                                  deathsNoPrimaryInfo, sumPrimaryOutbs,
-                                                  sumPrimaryDeaths, N, M, R);
-                    myfile << pij << ' ';
-                    probRow.push_back(pij);
-                };
-                probObsDeaths.push_back(probRow);
-                probRow.clear();
-                myfile << '\n';
-            };
-            probObsDeaths.clear();
-        };
-    };
-    myfile.close();
-};
+//void save_prob_p_q(vector<double>& alpha_vec, vector<double>& nu_vec,
+//                   vector<double>& p_vec, vector<double>& q_vec,
+//                   vector<int>& outbsPrimaryInfo, vector<int>& outbsNoPrimaryInfo,
+//                   vector<int>& deathsPrimaryInfo, vector<int>& deathsNoPrimaryInfo,
+//                   int sumPrimaryOutbs, int sumPrimaryDeaths, int M, int N, double R )
+//{
+//    ostringstream dirStringStream, fileStringStream;
+//    ofstream myfile;
+//    const char * filepath;
+//    const char * dirpath;
+//    vector<vector<double>> probObsDeaths;
+//    vector<double> probRow;
+//    double pij;
+//    for(double alpha: alpha_vec)
+//    {
+//        for( double nu: nu_vec)
+//        {
+//            dirStringStream << "./results/alpha=" << int(alpha*100)/100.0 << ",nu=" << int(nu*100)/100.0;
+//            dirpath = dirStringStream.str().c_str();
+//            mkdir(dirpath,0777);
+//            
+//            fileStringStream << dirStringStream.str().c_str() <<"/prob_p_q.txt";
+//            filepath = fileStringStream.str().c_str();
+//            fileStringStream.str(string());
+//            dirStringStream.str(string());
+//            myfile.open ( filepath );
+//            
+//            if( abs(round(nu / alpha ) - nu / alpha) < 1e-12 )
+//            {
+//                cout << "slightly adjusted nu for alpha: "<<alpha<<", nu: "<<nu<< "\n";
+//                nu += 1e-6;
+//            };
+//            
+//            for(double p: p_vec)
+//            {
+//                for(double q: q_vec)
+//                {
+//                    cout << "alpha: " << alpha <<", nu: "<< nu << ", p: " << p <<", q: "<< q << "\n";
+//                    
+//                    pij = getProbObsOutbsAndDeaths(outbsPrimaryInfo, outbsNoPrimaryInfo,
+//                                                   deathsPrimaryInfo, deathsNoPrimaryInfo,sumPrimaryOutbs, sumPrimaryDeaths, M, N,
+//                                                   cachedHxzuw);
+//                    myfile << pij << ' ';
+//                    probRow.push_back(pij);
+//                };
+//                probObsDeaths.push_back(probRow);
+//                probRow.clear();
+//                myfile << '\n';
+//            };
+//            probObsDeaths.clear();
+//        };
+//    };
+//    myfile.close();
+//};

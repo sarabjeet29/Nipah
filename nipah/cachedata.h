@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <zlib.h>
+#include "readdata.h"
 
 void cache_Gxy(vector<double>& alpha_vec, vector<double>& nu_vec, double R, int M, int N);
 void cache_Hxzuw(vector<double>& alpha_vec, vector<double>& nu_vec, vector<double>& p_vec,

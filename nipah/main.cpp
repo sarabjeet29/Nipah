@@ -7,6 +7,9 @@
 //
 
 #include "cachedata.h"
+#include "readdata.h"
+
+using namespace std;
 
 int main( void )
 {
@@ -65,20 +68,19 @@ int main( void )
     for( double q = q_min; q < q_max + q_step; q += q_step)
         q_vec.push_back(q);
     
+    cache_Hxzuw(alpha_vec, nu_vec, p_vec, q_vec, R, M, N);
     cache_Gxy(alpha_vec, nu_vec, R, M, N);
   
     save_prob_alpha_nu(alpha_vec, nu_vec, outbsPrimaryInfo, outbsNoPrimaryInfo,
-                       sumPrimaryOutbs, N, M);
+                       sumPrimaryOutbs, M, N);
 
     save_PmnPrimaryInfo(alpha_vec, nu_vec, outbsPrimaryInfo, sumPrimaryOutbs, M, N);
 
     save_PmnNoPrimaryInfo(alpha_vec, nu_vec, outbsNoPrimaryInfo, M, N);
     
-    save_prob_p_q(alpha_vec, nu_vec, p_vec, q_vec, outbsPrimaryInfo, outbsNoPrimaryInfo,
-                  deathsPrimaryInfo, deathsNoPrimaryInfo, sumPrimaryOutbs, sumPrimaryDeaths,
-                  N, M, R );
+//    save_prob_p_q(alpha_vec, nu_vec, p_vec, q_vec, outbsPrimaryInfo, outbsNoPrimaryInfo,
+//                  deathsPrimaryInfo, deathsNoPrimaryInfo, sumPrimaryOutbs, sumPrimaryDeaths,
+//                  N, M, R );
     
-    cache_Hxzuw(alpha_vec, nu_vec, p_vec, q_vec, R, M, N);
-
     return 0;
 };

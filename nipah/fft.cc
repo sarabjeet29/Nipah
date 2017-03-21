@@ -91,3 +91,63 @@ void runfft2D( int M, int N, vector<vector<cdouble>>& rawInput,
  	 fftw_destroy_plan(plan);
  	 fftw_free(in); fftw_free(out);
  };
+
+void runfft2DflatInput(int M, int N, vector<cdouble>& fftInput, vector<vector<double>>& fftOutput)
+{
+    vector<double> row;
+    fftw_complex *in, *out;
+    fftw_plan plan;
+    int size = M * N, index1D;
+    
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * size);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * size);
+    
+    for( int i = 0; i < size; i++ )
+    {
+        REAL(in,i) = real( fftInput[i] );
+        IMAG(in,i) = imag( fftInput[i] );
+    };
+    
+    plan = fftw_plan_dft_2d(M, N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftw_execute(plan); /* repeat as needed */
+    
+    for( int i = 0; i < M; i++)
+    {
+        for( int j = 0; j < N; j++)
+        {
+            index1D = i * N + j;
+            row.push_back(REAL(out,index1D) / size);
+        };
+        fftOutput.push_back(row);
+        row.clear();
+    };
+    
+    fftw_destroy_plan(plan);
+    fftw_free(in); fftw_free(out);
+};
+
+void runfft2DflatIO(int M, int N, vector<cdouble>& fftInput, vector<cdouble>& fftOutput)
+{
+    fftw_complex *in, *out;
+    fftw_plan plan;
+    int size = M * N;
+    
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * size);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * size);
+    
+    for( int i = 0; i < size; i++ )
+    {
+        REAL(in,i) = real( fftInput[i] );
+        IMAG(in,i) = imag( fftInput[i] );
+    };
+    
+    plan = fftw_plan_dft_2d(M, N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftw_execute(plan); /* repeat as needed */
+    
+    for( int i = 0; i < size; i++)
+        fftOutput.push_back(cdouble(REAL(out,i) / size, IMAG(out,i) / size));
+    
+    fftw_destroy_plan(plan);
+    fftw_free(in); fftw_free(out);
+};
+
