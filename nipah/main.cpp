@@ -16,8 +16,8 @@ int main( void )
     int N, M, sumPrimaryOutbs, sumPrimaryDeaths;
     double R, alpha_min, alpha_max, alpha_step, nu_min, nu_max, nu_step, p_min, p_max, p_step, q_min, q_max, q_step;
     
-    N = 100;
-    M = 100;
+    N = 300;
+    M = 300;
     R = 1.0;
 
     sumPrimaryOutbs = 60;
@@ -68,15 +68,16 @@ int main( void )
     for( double q = q_min; q < q_max + q_step; q += q_step)
         q_vec.push_back(q);
     
-    cache_Hxzuw(alpha_vec, nu_vec, p_vec, q_vec, R, M, N);
     cache_Gxy(alpha_vec, nu_vec, R, M, N);
-  
+
+//    cache_Hxzuw(alpha_vec, nu_vec, p_vec, q_vec, R, M, N);
+//
     save_prob_alpha_nu(alpha_vec, nu_vec, outbsPrimaryInfo, outbsNoPrimaryInfo,
                        sumPrimaryOutbs, M, N);
-
-    save_PmnPrimaryInfo(alpha_vec, nu_vec, outbsPrimaryInfo, sumPrimaryOutbs, M, N);
-
-    save_PmnNoPrimaryInfo(alpha_vec, nu_vec, outbsNoPrimaryInfo, M, N);
+//
+//    save_PmnPrimaryInfo(alpha_vec, nu_vec, outbsPrimaryInfo, sumPrimaryOutbs, M, N);
+//
+//    save_PmnNoPrimaryInfo(alpha_vec, nu_vec, outbsNoPrimaryInfo, M, N);
     
 //    save_prob_p_q(alpha_vec, nu_vec, p_vec, q_vec, outbsPrimaryInfo, outbsNoPrimaryInfo,
 //                  deathsPrimaryInfo, deathsNoPrimaryInfo, sumPrimaryOutbs, sumPrimaryDeaths,

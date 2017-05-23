@@ -4,10 +4,12 @@
 void getDistOutbs(int N, vector<cdouble>& cachedGxy, vector<double>& distOutbs)
 {
     vector<cdouble> fftInput(cachedGxy.begin(), cachedGxy.begin() + N);
+    for(int j = 0; j < 100; j++)
+        fftInput.push_back(0);
     vector<cdouble> fftOutput;
 	runfft1D( N, fftInput, fftOutput );
     
-    for(int i = 0; i < N; i++)
+    for(int i = 0; i < N + 100; i++)
         distOutbs.push_back(real(fftOutput[i]));
 };
 
