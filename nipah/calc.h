@@ -10,7 +10,7 @@ void getPmPrimaryInfo(vector<int>& outbsPrimaryInfo, int sumPrimaryOutbs, int ta
 
 void getPmNoPrimaryInfo(int M, int N, vector<cdouble> cachedGxy, vector<vector<double>>& Pmn);
 
-void getDistOutbsAndDeaths(double, double, double, double, vector<vector<double>>&, int,double);
+void getDistOutbsAndDeaths(int N, vector<cdouble> cachedHzw, vector<vector<double>>& distOutbsAndDeaths);
 
 void getDistSumPrimaryOutbsAndDeaths(double, double, double, double, vector<int>&, vector<int>&, vector<vector<double>>&, int, int, double, vector<vector<double>>&);
 

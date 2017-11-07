@@ -6,6 +6,7 @@
 #include <complex>
 #include <ctime>
 #include <vector>
+#include <libomp/omp.h>
 
 #define MAXIT 100000000
 #define EPS 1e-12

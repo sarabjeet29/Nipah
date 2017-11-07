@@ -133,10 +133,10 @@ void getPmNoPrimaryInfo(int M, int N, vector<cdouble> cachedGxy, vector<vector<d
     };
 };
 
-void getDistOutbsAndDeaths(int M, int N, vector<cdouble> cachedHxzuw,
+void getDistOutbsAndDeaths(int N, vector<cdouble> cachedHzw,
                            vector<vector<double>>& distOutbsAndDeaths)
 {
-    vector<cdouble> fftInput(cachedHxzuw.begin(), cachedHxzuw.begin() + M*M);
+    vector<cdouble> fftInput(cachedHzw.begin(), cachedHzw.end());
     vector<cdouble> fftOutput;
     runfft2DflatInput(N, N, fftInput, distOutbsAndDeaths);
 };
@@ -181,28 +181,28 @@ void getDistSumPrimaryOutbsAndDeaths(vector<int>& outbsPrimaryInfo, vector<int>&
     runfft2DflatInput( M, M, outerfftInput, distSumPrimaryOutbsAndDeaths);
 };
 
-double getProbObsOutbsAndDeaths(vector<int>& outbsPrimaryInfo,
-                               vector<int>& outbsNoPrimaryInfo,
-                               vector<int>& deathsPrimaryInfo,
-                               vector<int>& deathsNoPrimaryInfo, int sumPrimaryOutbs,
-                               int sumPrimaryDeaths, int M, int N,
-                               vector<cdouble> cachedHxzuw)
-{
-    vector<vector<double>> distOutbsAndDeaths, distSumPrimaryOutbsAndDeaths;
-    getDistOutbsAndDeaths(M, N, cachedHxzuw, distOutbsAndDeaths);
-    getDistSumPrimaryOutbsAndDeaths(outbsPrimaryInfo, deathsPrimaryInfo, distOutbsAndDeaths, M, N,
-                                    cachedHxzuw, distSumPrimaryOutbsAndDeaths);
-    
-    double prob = distSumPrimaryOutbsAndDeaths[sumPrimaryOutbs][sumPrimaryDeaths];
-    
-    for( int i = 0; i < outbsNoPrimaryInfo.size(); i++ )
-        prob *= distOutbsAndDeaths[outbsNoPrimaryInfo[i]][deathsNoPrimaryInfo[i]];
-
-    for( int j = 0; j < outbsPrimaryInfo.size(); j++ )
-        prob *= distOutbsAndDeaths[outbsPrimaryInfo[j]][deathsPrimaryInfo[j]];
-
-    return prob;
-};
+//double getProbObsOutbsAndDeaths(vector<int>& outbsPrimaryInfo,
+//                               vector<int>& outbsNoPrimaryInfo,
+//                               vector<int>& deathsPrimaryInfo,
+//                               vector<int>& deathsNoPrimaryInfo, int sumPrimaryOutbs,
+//                               int sumPrimaryDeaths, int M, int N,
+//                               vector<cdouble> cachedHxzuw)
+//{
+//    vector<vector<double>> distOutbsAndDeaths, distSumPrimaryOutbsAndDeaths;
+//    getDistOutbsAndDeaths(M, N, cachedHxzuw, distOutbsAndDeaths);
+//    getDistSumPrimaryOutbsAndDeaths(outbsPrimaryInfo, deathsPrimaryInfo, distOutbsAndDeaths, M, N,
+//                                    cachedHxzuw, distSumPrimaryOutbsAndDeaths);
+//    
+//    double prob = distSumPrimaryOutbsAndDeaths[sumPrimaryOutbs][sumPrimaryDeaths];
+//    
+//    for( int i = 0; i < outbsNoPrimaryInfo.size(); i++ )
+//        prob *= distOutbsAndDeaths[outbsNoPrimaryInfo[i]][deathsNoPrimaryInfo[i]];
+//
+//    for( int j = 0; j < outbsPrimaryInfo.size(); j++ )
+//        prob *= distOutbsAndDeaths[outbsPrimaryInfo[j]][deathsPrimaryInfo[j]];
+//
+//    return prob;
+//};
 
 
 

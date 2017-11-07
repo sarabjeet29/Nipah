@@ -7,6 +7,8 @@
 #include "readdata.h"
 
 void cache_Gxy(vector<double>& alpha_vec, vector<double>& nu_vec, double R, int M, int N);
+void cache_Hzw(vector<double>& alpha_vec, vector<double>& nu_vec, vector<double>& p_vec,
+               vector<double>& q_vec, double R, int N);
 void cache_Hxzuw(vector<double>& alpha_vec, vector<double>& nu_vec, vector<double>& p_vec,
                  vector<double> q_vec, double R, double M, double N);
 
@@ -20,6 +22,8 @@ void save_PmnPrimaryInfo(vector<double> alpha_vec, vector<double> nu_vec,
 
 void save_PmnNoPrimaryInfo(vector<double> alpha_vec, vector<double> nu_vec,
                            vector<int> outbsNoPrimaryInfo, int M, int N);
+
+void save_Pnd(vector<double> alpha_vec, vector<double> nu_vec, vector<double> p_vec, vector<double> q_vec, vector<int> outbs, vector<int> deaths, int N);
 
 void save_prob_p_q(vector<double>& alpha_vec, vector<double>& nu_vec,
                    vector<double>& p_vec, vector<double>& q_vec,
